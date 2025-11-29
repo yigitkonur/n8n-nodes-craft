@@ -12,35 +12,32 @@ import type {
 
 import { buildBlocksFromMarkdown, parseBlockArray } from '../../shared/blockBuilder';
 
+const showOnlyForBlockInsert = { operation: ['insert'], resource: ['block'] };
+
 /**
- * Build position object from node parameters
- * Returns safe defaults if position is not configured
+ * Build position object from simple node parameters
  */
 function buildPositionObject(context: IExecuteSingleFunctions): IDataObject {
-	// Safe extraction with multiple fallback layers
-	let positionParam: IDataObject | undefined;
+	let positionType = 'end';
+	let targetDate = 'today';
+	let referenceBlockId = '';
+
 	try {
-		positionParam = context.getNodeParameter('position', {}) as IDataObject;
+		positionType = context.getNodeParameter('positionType', 'end') as string;
+		targetDate = context.getNodeParameter('targetDate', 'today') as string;
+		referenceBlockId = context.getNodeParameter('referenceBlockId', '') as string;
 	} catch {
-		// Parameter doesn't exist or can't be read - use defaults
-		positionParam = undefined;
+		// Use defaults if parameters can't be read
 	}
 
-	// Extract positionValues with null-safe access
-	const positionValues = (positionParam?.positionValues as IDataObject) ?? {};
-
-	// Build position with safe defaults
 	const position: IDataObject = {
-		position: (positionValues.position as string) || 'end',
-		date: (positionValues.date as string) || 'today',
+		position: positionType || 'end',
+		date: targetDate || 'today',
 	};
 
 	// Add referenceBlockId if using before/after
-	if (
-		['before', 'after'].includes(position.position as string) &&
-		positionValues.referenceBlockId
-	) {
-		position.referenceBlockId = positionValues.referenceBlockId;
+	if (['before', 'after'].includes(positionType) && referenceBlockId) {
+		position.referenceBlockId = referenceBlockId;
 	}
 
 	return position;
@@ -49,47 +46,32 @@ function buildPositionObject(context: IExecuteSingleFunctions): IDataObject {
 /**
  * PreSend hook for block insert operation
  * Transforms markdown content or JSON blocks into the API request body
- * Supports three modes:
- * - rawMarkdown: Uses native API text/markdown content-type (simplest)
- * - markdown: Client-side block building with smart splitting
- * - blocks: Pre-structured JSON block array
  */
 export async function blockInsertPreSend(
 	this: IExecuteSingleFunctions,
 	requestOptions: IHttpRequestOptions,
 ): Promise<IHttpRequestOptions> {
-	const contentMode = this.getNodeParameter('contentMode', 'rawMarkdown') as string;
-
-	// Build position object (used by all modes)
-	const position = buildPositionObject(this);
-
-	// RAW MARKDOWN MODE: Use API's native text/markdown content-type
-	// This is the simplest approach - API handles markdown parsing directly
-	if (contentMode === 'rawMarkdown') {
-		const markdownContent = this.getNodeParameter('rawMarkdownContent', '') as string;
-
-		// Set Content-Type to text/markdown
-		requestOptions.headers = {
-			...requestOptions.headers,
-			'Content-Type': 'text/markdown',
-		};
-
-		// Position goes as query parameter for text/markdown mode
-		requestOptions.qs = {
-			...requestOptions.qs,
-			position: JSON.stringify(position),
-		};
-
-		// Raw markdown content as body
-		requestOptions.body = markdownContent;
-
-		return requestOptions;
+	let contentMode = 'markdown';
+	try {
+		contentMode = this.getNodeParameter('contentMode', 'markdown') as string;
+	} catch {
+		// Default to markdown mode
 	}
+
+	// Build position object
+	const position = buildPositionObject(this);
 
 	// SMART MARKDOWN MODE: Client-side block building with smart splitting
 	if (contentMode === 'markdown') {
-		const markdownContent = this.getNodeParameter('markdownContent', '') as string;
-		const processingOptions = this.getNodeParameter('blockProcessingOptions', {}) as IDataObject;
+		let markdownContent = '';
+		let processingOptions: IDataObject = {};
+		
+		try {
+			markdownContent = this.getNodeParameter('markdownContent', '') as string;
+			processingOptions = this.getNodeParameter('blockProcessingOptions', {}) as IDataObject;
+		} catch {
+			// Use defaults
+		}
 
 		const builtBlocks = buildBlocksFromMarkdown(markdownContent, {
 			preserveHeaders: processingOptions.preserveHeaders !== false,
@@ -105,7 +87,13 @@ export async function blockInsertPreSend(
 	}
 
 	// BLOCKS MODE: Pre-structured JSON block array
-	const blocksJson = this.getNodeParameter('blocksJson') as string;
+	let blocksJson = '[{"type":"text","markdown":"","textStyle":"body"}]';
+	try {
+		blocksJson = this.getNodeParameter('blocksJson', blocksJson) as string;
+	} catch {
+		// Use default
+	}
+	
 	const blocks = parseBlockArray(blocksJson) as unknown as IDataObject[];
 
 	requestOptions.body = {
@@ -116,70 +104,42 @@ export async function blockInsertPreSend(
 	return requestOptions;
 }
 
-const showOnlyForBlockInsert = { operation: ['insert'], resource: ['block'] };
-
 export const blockInsertDescription: INodeProperties[] = [
 	// Content Mode selector
 	{
 		displayName: 'Content Mode',
 		name: 'contentMode',
 		type: 'options',
+		noDataExpression: true,
 		options: [
 			{
-				name: 'Raw Markdown (API Native)',
-				value: 'rawMarkdown',
-				description: 'Send markdown directly to API - simplest option, API handles parsing',
-			},
-			{
-				name: 'Smart Markdown (Block Split)',
+				name: 'Markdown',
 				value: 'markdown',
-				description: 'Client-side splitting into optimal blocks with header detection',
+				description: 'Paste markdown content - automatically split into optimal blocks',
 			},
 			{
-				name: 'Block Array (Advanced)',
+				name: 'Block Array (JSON)',
 				value: 'blocks',
 				description: 'Provide pre-structured block array in JSON format',
 			},
 		],
-		default: 'rawMarkdown',
+		default: 'markdown',
 		displayOptions: { show: showOnlyForBlockInsert },
 		description: 'How to provide the content to insert',
 	},
 
-	// Raw Markdown Content (shown when contentMode = rawMarkdown)
-	{
-		displayName: 'Markdown Content',
-		name: 'rawMarkdownContent',
-		type: 'string',
-		required: true,
-		typeOptions: {
-			rows: 10,
-		},
-		default: '',
-		placeholder: '## Meeting Notes\n\n- Discussed Q1 goals\n- Action items assigned\n- Follow up next week',
-		description:
-			'Raw markdown content sent directly to the API using text/markdown content-type. The API handles parsing.',
-		displayOptions: {
-			show: {
-				...showOnlyForBlockInsert,
-				contentMode: ['rawMarkdown'],
-			},
-		},
-	},
-
-	// Smart Markdown Content (shown when contentMode = markdown)
+	// Markdown Content (shown when contentMode = markdown)
 	{
 		displayName: 'Markdown Content',
 		name: 'markdownContent',
 		type: 'string',
-		required: true,
 		typeOptions: {
 			rows: 10,
 		},
 		default: '',
+		required: true,
 		placeholder: '# Meeting Notes\n\n- Discussed timeline\n- Assigned tasks\n\nNext steps...',
-		description:
-			'Paste any length of markdown content. The node will automatically split it into optimal blocks while preserving structure.',
+		description: 'Paste any length of markdown content. The node will automatically split it into optimal blocks.',
 		displayOptions: {
 			show: {
 				...showOnlyForBlockInsert,
@@ -190,7 +150,7 @@ export const blockInsertDescription: INodeProperties[] = [
 
 	// Block Processing Options (shown when contentMode = markdown)
 	{
-		displayName: 'Block Processing Options',
+		displayName: 'Processing Options',
 		name: 'blockProcessingOptions',
 		type: 'collection',
 		placeholder: 'Add Option',
@@ -207,7 +167,7 @@ export const blockInsertDescription: INodeProperties[] = [
 				name: 'preserveHeaders',
 				type: 'boolean',
 				default: true,
-				description: 'Whether to keep headers as separate blocks with proper text style',
+				description: 'Whether to detect headers (# ## ###) and apply proper text styles',
 			},
 			{
 				displayName: 'Split on Paragraphs',
@@ -224,9 +184,9 @@ export const blockInsertDescription: INodeProperties[] = [
 		displayName: 'Blocks (JSON)',
 		name: 'blocksJson',
 		type: 'json',
-		default: '[{"type":"text","markdown":"Content here"}]',
-		description:
-			'Pre-structured block array. Each block should have "type" and "markdown" properties.',
+		default: '[{"type":"text","markdown":"Content here","textStyle":"body"}]',
+		required: true,
+		description: 'Pre-structured block array. Each block should have "type", "markdown", and "textStyle" properties.',
 		displayOptions: {
 			show: {
 				...showOnlyForBlockInsert,
@@ -235,62 +195,49 @@ export const blockInsertDescription: INodeProperties[] = [
 		},
 	},
 
-	// Position
+	// ===== POSITION SETTINGS (simple properties, no fixedCollection) =====
+
+	// Target Date
 	{
-		displayName: 'Position',
-		name: 'position',
-		type: 'fixedCollection',
-		default: { positionValues: { position: 'end', date: 'today' } },
-		placeholder: 'Add Position',
+		displayName: 'Target Date',
+		name: 'targetDate',
+		type: 'string',
+		default: 'today',
+		placeholder: 'today, tomorrow, yesterday, or YYYY-MM-DD',
+		description: 'Which daily note to insert into',
 		displayOptions: { show: showOnlyForBlockInsert },
+	},
+
+	// Position Type
+	{
+		displayName: 'Insert Position',
+		name: 'positionType',
+		type: 'options',
+		noDataExpression: true,
 		options: [
-			{
-				name: 'positionValues',
-				displayName: 'Position',
-				values: [
-					{
-						displayName: 'Position Type',
-						name: 'position',
-						type: 'options',
-						options: [
-							{ name: 'End', value: 'end', description: 'Insert at the end of the document' },
-							{
-								name: 'Start',
-								value: 'start',
-								description: 'Insert at the start of the document',
-							},
-							{
-								name: 'Before',
-								value: 'before',
-								description: 'Insert before a specific block',
-							},
-							{ name: 'After', value: 'after', description: 'Insert after a specific block' },
-						],
-						default: 'end',
-					},
-					{
-						displayName: 'Target Date',
-						name: 'date',
-						type: 'string',
-						default: 'today',
-						placeholder: 'today, tomorrow, yesterday, or YYYY-MM-DD',
-						description: 'Which daily note to insert into',
-					},
-					{
-						displayName: 'Reference Block ID',
-						name: 'referenceBlockId',
-						type: 'string',
-						default: '',
-						placeholder: 'Block ID (UUID)',
-						description: 'The block ID to position relative to (required for before/after)',
-						displayOptions: {
-							show: {
-								position: ['before', 'after'],
-							},
-						},
-					},
-				],
-			},
+			{ name: 'End of Document', value: 'end' },
+			{ name: 'Start of Document', value: 'start' },
+			{ name: 'Before Block', value: 'before' },
+			{ name: 'After Block', value: 'after' },
 		],
+		default: 'end',
+		description: 'Where to insert the content in the daily note',
+		displayOptions: { show: showOnlyForBlockInsert },
+	},
+
+	// Reference Block ID (only for before/after)
+	{
+		displayName: 'Reference Block ID',
+		name: 'referenceBlockId',
+		type: 'string',
+		default: '',
+		placeholder: 'Block UUID',
+		description: 'The block ID to position relative to (required for before/after)',
+		displayOptions: {
+			show: {
+				...showOnlyForBlockInsert,
+				positionType: ['before', 'after'],
+			},
+		},
 	},
 ];

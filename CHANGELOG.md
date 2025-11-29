@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.15] - 2025-11-29
+
+### Fixed
+
+- **Critical**: Complete rewrite of Insert operation to fix n8n frontend crash
+  - Replaced `fixedCollection` position field with simple direct properties
+  - Frontend no longer crashes with "Cannot read properties of undefined (reading 'positionValues')"
+  - All parameters now have proper try-catch wrappers with defaults
+
+### Changed
+
+- **Simplified Insert UI**: Position is now configured with simple dropdowns instead of nested collection
+  - `Target Date`: Which daily note to insert into (default: today)
+  - `Insert Position`: End, Start, Before Block, After Block (default: end)
+  - `Reference Block ID`: Only shown when using Before/After
+
+### Removed
+
+- Removed non-working "Raw Markdown (API Native)" mode - API doesn't support text/markdown content-type
+- Simplified to two content modes: Markdown (smart splitting) and Block Array (JSON)
+
 ## [1.0.14] - 2025-11-29
 
 ### Fixed
