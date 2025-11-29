@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.9] - 2025-11-29
+
+### Fixed
+
+- **Critical**: Code blocks with internal blank lines no longer cause 400 validation errors
+  - Root cause: `splitByParagraphs()` was splitting code blocks on `\n\n`, creating invalid fragments
+  - Fix: Extract code blocks BEFORE paragraph splitting using regex `/```[\s\S]*?```/g`
+  - Code blocks are now preserved as single units and sent without textStyle (API auto-detects)
+  - This fixes issues with markdown like:
+    ```
+    ```other
+    line 1
+    
+    line 2
+    ```
+    ```
+
 ## [1.0.8] - 2025-11-29
 
 ### Changed

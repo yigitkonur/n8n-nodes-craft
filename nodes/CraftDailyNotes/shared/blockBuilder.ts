@@ -1,7 +1,7 @@
 /**
  * SMART BLOCK BUILDER
  * Converts markdown content into Craft API block structure
- * Handles intelligent splitting for large content
+ * Handles code blocks, headers, and intelligent splitting
  */
 
 export interface BlockStructure {
@@ -33,10 +33,7 @@ function detectTextStyle(line: string): BlockStructure['textStyle'] {
 	if (line.startsWith('## ')) return 'h2';
 	if (line.startsWith('### ')) return 'h3';
 	// h4 is the deepest heading level supported by the API
-	// Map ####, #####, ###### all to h4
 	if (line.startsWith('#### ') || line.startsWith('##### ') || line.startsWith('###### ')) return 'h4';
-	// Note: Code blocks (```) are auto-detected by API from markdown syntax
-	// Valid textStyle values: card, page, h1, h2, h3, h4, caption, body
 	return 'body';
 }
 
@@ -48,27 +45,42 @@ function isHeader(line: string): boolean {
 }
 
 /**
- * Split text by sentences while respecting the max size
+ * Extract code blocks from markdown BEFORE paragraph splitting
+ * Returns array of {type: 'code' | 'text', content: string}
  */
-function splitBySentences(text: string, maxSize: number): string[] {
-	const sentences = text.match(/[^.!?]+[.!?]+\s*/g) || [text];
-	const chunks: string[] = [];
-	let currentChunk = '';
-
-	for (const sentence of sentences) {
-		if (currentChunk.length + sentence.length > maxSize && currentChunk.length > 0) {
-			chunks.push(currentChunk.trim());
-			currentChunk = sentence;
-		} else {
-			currentChunk += sentence;
+function extractCodeBlocks(markdown: string): Array<{ type: 'code' | 'text'; content: string }> {
+	const result: Array<{ type: 'code' | 'text'; content: string }> = [];
+	
+	// Match code blocks: ```language\n...content...\n```
+	// This regex captures complete code blocks including internal newlines
+	const codeBlockRegex = /```[\s\S]*?```/g;
+	
+	let lastIndex = 0;
+	let match;
+	
+	while ((match = codeBlockRegex.exec(markdown)) !== null) {
+		// Add text before this code block
+		if (match.index > lastIndex) {
+			const textBefore = markdown.slice(lastIndex, match.index);
+			if (textBefore.trim()) {
+				result.push({ type: 'text', content: textBefore });
+			}
+		}
+		
+		// Add the code block as a single unit
+		result.push({ type: 'code', content: match[0] });
+		lastIndex = match.index + match[0].length;
+	}
+	
+	// Add remaining text after last code block
+	if (lastIndex < markdown.length) {
+		const remaining = markdown.slice(lastIndex);
+		if (remaining.trim()) {
+			result.push({ type: 'text', content: remaining });
 		}
 	}
-
-	if (currentChunk.trim()) {
-		chunks.push(currentChunk.trim());
-	}
-
-	return chunks;
+	
+	return result;
 }
 
 /**
@@ -94,58 +106,58 @@ export function buildBlocksFromMarkdown(
 		return [];
 	}
 
-	// Split by paragraphs first
-	const paragraphs = opts.splitOnParagraphs ? splitByParagraphs(markdown) : [markdown];
+	// STEP 1: Extract code blocks first (they should never be split)
+	const segments = extractCodeBlocks(markdown);
 
-	for (const paragraph of paragraphs) {
-		const trimmed = paragraph.trim();
-		if (!trimmed) continue;
+	for (const segment of segments) {
+		// Code blocks: send as single block, NO textStyle (API auto-detects)
+		if (segment.type === 'code') {
+			blocks.push({
+				type: 'text',
+				markdown: segment.content.trim(),
+				// NO textStyle - API auto-detects code blocks from ``` syntax
+			});
+			continue;
+		}
 
-		// Check if this is a header
-		if (opts.preserveHeaders && isHeader(trimmed)) {
-			const lines = trimmed.split('\n');
-			for (const line of lines) {
-				if (isHeader(line)) {
-					blocks.push({
-						type: 'text',
-						markdown: line,
-						textStyle: detectTextStyle(line),
-					});
-				} else if (line.trim()) {
-					blocks.push({
-						type: 'text',
-						markdown: line.trim(),
-					});
+		// STEP 2: Split text segments by paragraphs
+		const paragraphs = opts.splitOnParagraphs 
+			? splitByParagraphs(segment.content) 
+			: [segment.content];
+
+		for (const paragraph of paragraphs) {
+			const trimmed = paragraph.trim();
+			if (!trimmed) continue;
+
+			// Headers: each gets its own block with textStyle
+			if (opts.preserveHeaders && isHeader(trimmed)) {
+				const lines = trimmed.split('\n');
+				for (const line of lines) {
+					const lineTrimmed = line.trim();
+					if (!lineTrimmed) continue;
+					
+					if (isHeader(lineTrimmed)) {
+						blocks.push({
+							type: 'text',
+							markdown: lineTrimmed,
+							textStyle: detectTextStyle(lineTrimmed),
+						});
+					} else {
+						// Non-header line after header - no textStyle needed
+						blocks.push({
+							type: 'text',
+							markdown: lineTrimmed,
+						});
+					}
 				}
+				continue;
 			}
-			continue;
-		}
 
-		// Check if this is a code block - don't set textStyle, API auto-detects from ``` syntax
-		// The API will return type: 'code' with language and rawCode properties
-		if (trimmed.startsWith('```')) {
+			// Regular text: single block, no textStyle (API uses body by default)
 			blocks.push({
 				type: 'text',
 				markdown: trimmed,
 			});
-			continue;
-		}
-
-		// Handle regular content - split if too large
-		if (trimmed.length <= opts.maxBlockSize) {
-			blocks.push({
-				type: 'text',
-				markdown: trimmed,
-			});
-		} else {
-			// Split large content by sentences
-			const chunks = splitBySentences(trimmed, opts.maxBlockSize);
-			for (const chunk of chunks) {
-				blocks.push({
-					type: 'text',
-					markdown: chunk,
-				});
-			}
 		}
 	}
 
