@@ -1,7 +1,9 @@
 /**
  * BLOCK INSERT OPERATION
  * POST /blocks - Insert content into a daily note
- * Uses preSend hook for smart block building within declarative routing
+ * 
+ * SIMPLE APPROACH: Send markdown as single text block, Craft API parses it automatically!
+ * The API splits markdown into proper blocks (headers, code, paragraphs) server-side.
  */
 import type {
 	INodeProperties,
@@ -9,8 +11,6 @@ import type {
 	IHttpRequestOptions,
 	IDataObject,
 } from 'n8n-workflow';
-
-import { buildBlocksFromMarkdown, parseBlockArray } from '../../shared/blockBuilder';
 
 const showOnlyForBlockInsert = { operation: ['insert'], resource: ['block'] };
 
@@ -45,59 +45,37 @@ function buildPositionObject(context: IExecuteSingleFunctions): IDataObject {
 
 /**
  * PreSend hook for block insert operation
- * Transforms markdown content or JSON blocks into the API request body
+ * 
+ * SIMPLE: Just send markdown as a single text block.
+ * Craft API automatically parses and splits into proper blocks:
+ * - Headers become h1/h2/h3/h4 blocks
+ * - Code fences become code blocks with language detection
+ * - Paragraphs become text blocks
+ * - Lists are properly formatted
  */
 export async function blockInsertPreSend(
 	this: IExecuteSingleFunctions,
 	requestOptions: IHttpRequestOptions,
 ): Promise<IHttpRequestOptions> {
-	let contentMode = 'markdown';
-	try {
-		contentMode = this.getNodeParameter('contentMode', 'markdown') as string;
-	} catch {
-		// Default to markdown mode
-	}
-
 	// Build position object
 	const position = buildPositionObject(this);
 
-	// SMART MARKDOWN MODE: Client-side block building with smart splitting
-	if (contentMode === 'markdown') {
-		let markdownContent = '';
-		let processingOptions: IDataObject = {};
-		
-		try {
-			markdownContent = this.getNodeParameter('markdownContent', '') as string;
-			processingOptions = this.getNodeParameter('blockProcessingOptions', {}) as IDataObject;
-		} catch {
-			// Use defaults
-		}
-
-		const builtBlocks = buildBlocksFromMarkdown(markdownContent, {
-			preserveHeaders: processingOptions.preserveHeaders !== false,
-			splitOnParagraphs: processingOptions.splitOnParagraphs !== false,
-		});
-
-		requestOptions.body = {
-			blocks: builtBlocks as unknown as IDataObject[],
-			position,
-		};
-
-		return requestOptions;
-	}
-
-	// BLOCKS MODE: Pre-structured JSON block array
-	let blocksJson = '[{"type":"text","markdown":"","textStyle":"body"}]';
+	// Get markdown content
+	let markdownContent = '';
 	try {
-		blocksJson = this.getNodeParameter('blocksJson', blocksJson) as string;
+		markdownContent = this.getNodeParameter('markdownContent', '') as string;
 	} catch {
-		// Use default
+		// Use empty string as default
 	}
-	
-	const blocks = parseBlockArray(blocksJson) as unknown as IDataObject[];
 
+	// SIMPLE: Send as single text block with markdown - API parses it!
 	requestOptions.body = {
-		blocks,
+		blocks: [
+			{
+				type: 'text',
+				markdown: markdownContent,
+			},
+		],
 		position,
 	};
 
@@ -105,30 +83,7 @@ export async function blockInsertPreSend(
 }
 
 export const blockInsertDescription: INodeProperties[] = [
-	// Content Mode selector
-	{
-		displayName: 'Content Mode',
-		name: 'contentMode',
-		type: 'options',
-		noDataExpression: true,
-		options: [
-			{
-				name: 'Markdown',
-				value: 'markdown',
-				description: 'Paste markdown content - automatically split into optimal blocks',
-			},
-			{
-				name: 'Block Array (JSON)',
-				value: 'blocks',
-				description: 'Provide pre-structured block array in JSON format',
-			},
-		],
-		default: 'markdown',
-		displayOptions: { show: showOnlyForBlockInsert },
-		description: 'How to provide the content to insert',
-	},
-
-	// Markdown Content (shown when contentMode = markdown)
+	// Markdown Content - main input field
 	{
 		displayName: 'Markdown Content',
 		name: 'markdownContent',
@@ -138,64 +93,10 @@ export const blockInsertDescription: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		placeholder: '# Meeting Notes\n\n- Discussed timeline\n- Assigned tasks\n\nNext steps...',
-		description: 'Paste any length of markdown content. The node will automatically split it into optimal blocks.',
-		displayOptions: {
-			show: {
-				...showOnlyForBlockInsert,
-				contentMode: ['markdown'],
-			},
-		},
+		placeholder: '# Meeting Notes\n\n- Discussed timeline\n- Assigned tasks\n\n```javascript\nconsole.log("code blocks work too!");\n```\n\nNext steps...',
+		description: 'Paste markdown content. Craft API automatically parses it into proper blocks (headers, code, lists, etc.).',
+		displayOptions: { show: showOnlyForBlockInsert },
 	},
-
-	// Block Processing Options (shown when contentMode = markdown)
-	{
-		displayName: 'Processing Options',
-		name: 'blockProcessingOptions',
-		type: 'collection',
-		placeholder: 'Add Option',
-		default: {},
-		displayOptions: {
-			show: {
-				...showOnlyForBlockInsert,
-				contentMode: ['markdown'],
-			},
-		},
-		options: [
-			{
-				displayName: 'Preserve Headers',
-				name: 'preserveHeaders',
-				type: 'boolean',
-				default: true,
-				description: 'Whether to detect headers (# ## ###) and apply proper text styles',
-			},
-			{
-				displayName: 'Split on Paragraphs',
-				name: 'splitOnParagraphs',
-				type: 'boolean',
-				default: true,
-				description: 'Whether to split content on paragraph breaks (double newlines)',
-			},
-		],
-	},
-
-	// Blocks JSON (shown when contentMode = blocks)
-	{
-		displayName: 'Blocks (JSON)',
-		name: 'blocksJson',
-		type: 'json',
-		default: '[{"type":"text","markdown":"Content here","textStyle":"body"}]',
-		required: true,
-		description: 'Pre-structured block array. Each block should have "type", "markdown", and "textStyle" properties.',
-		displayOptions: {
-			show: {
-				...showOnlyForBlockInsert,
-				contentMode: ['blocks'],
-			},
-		},
-	},
-
-	// ===== POSITION SETTINGS (simple properties, no fixedCollection) =====
 
 	// Target Date
 	{
