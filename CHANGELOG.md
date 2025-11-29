@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.7] - 2025-11-29
+
+### Fixed
+
+- **Block Update Partial Updates**: Added "Don't Change" option for textStyle and listStyle
+  - Users can now explicitly set blocks to `body` or `none` without issues
+  - Default is now "Don't Change" to support true partial updates
+  - Only non-empty values are sent to API (matches task state pattern)
+
+### Changed
+
+- Updated `API_VALUE_REFERENCE.md` to document partial update patterns
+
 ## [1.0.6] - 2025-11-29
 
 ### Fixed

@@ -9,16 +9,17 @@
 ### textStyle (for text blocks)
 **Source:** API validation error message + response examples
 
-| Valid Value | Description |
-|-------------|-------------|
-| `body` | Default text style |
-| `card` | Card-styled block |
-| `page` | Page title style |
-| `h1` | Heading level 1 |
-| `h2` | Heading level 2 |
-| `h3` | Heading level 3 |
-| `h4` | Heading level 4 (deepest) |
-| `caption` | Caption text |
+| Valid Value | Description | Node Default |
+|-------------|-------------|--------------|
+| *(empty)* | Don't change (partial update) | ✅ Default |
+| `body` | Default text style | |
+| `card` | Card-styled block | |
+| `page` | Page title style | |
+| `h1` | Heading level 1 | |
+| `h2` | Heading level 2 | |
+| `h3` | Heading level 3 | |
+| `h4` | Heading level 4 (deepest) | |
+| `caption` | Caption text | |
 
 **⚠️ INVALID VALUES:**
 - `code` - NOT valid! API auto-detects code blocks from ``` markdown syntax
@@ -27,18 +28,23 @@
 
 **Code blocks:** Send as `type: 'text'` with markdown containing ``` syntax. API will return `type: 'code'` with `language` and `rawCode` properties.
 
+**Partial Updates:** When updating blocks, use empty string (Don't Change) to keep current style. Only non-empty values are sent to API.
+
 ---
 
 ### listStyle
 **Source:** API response examples
 
-| Valid Value | Description |
-|-------------|-------------|
-| `none` | No list style |
-| `bullet` | Bullet point list |
-| `numbered` | Numbered list |
-| `todo` | Todo/checkbox item |
-| `toggle` | Collapsible toggle |
+| Valid Value | Description | Node Default |
+|-------------|-------------|--------------|
+| *(empty)* | Don't change (partial update) | ✅ Default |
+| `none` | No list style | |
+| `bullet` | Bullet point list | |
+| `numbered` | Numbered list | |
+| `todo` | Todo/checkbox item | |
+| `toggle` | Collapsible toggle | |
+
+**Partial Updates:** When updating blocks, use empty string (Don't Change) to keep current style.
 
 ---
 
