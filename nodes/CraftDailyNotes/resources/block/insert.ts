@@ -14,11 +14,22 @@ import { buildBlocksFromMarkdown, parseBlockArray } from '../../shared/blockBuil
 
 /**
  * Build position object from node parameters
+ * Returns safe defaults if position is not configured
  */
 function buildPositionObject(context: IExecuteSingleFunctions): IDataObject {
-	const positionParam = context.getNodeParameter('position', {}) as IDataObject;
-	const positionValues = (positionParam.positionValues as IDataObject) || {};
+	// Safe extraction with multiple fallback layers
+	let positionParam: IDataObject | undefined;
+	try {
+		positionParam = context.getNodeParameter('position', {}) as IDataObject;
+	} catch {
+		// Parameter doesn't exist or can't be read - use defaults
+		positionParam = undefined;
+	}
 
+	// Extract positionValues with null-safe access
+	const positionValues = (positionParam?.positionValues as IDataObject) ?? {};
+
+	// Build position with safe defaults
 	const position: IDataObject = {
 		position: (positionValues.position as string) || 'end',
 		date: (positionValues.date as string) || 'today',
