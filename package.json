@@ -1,14 +1,19 @@
 {
-	"name": "n8n-nodes-boilerplate",
-	"version": "0.1.0",
-	"description": "AI-optimized n8n community node boilerplate with comprehensive documentation and examples",
+	"name": "n8n-nodes-craft-daily-notes",
+	"version": "1.0.0",
+	"description": "n8n community node for Craft Daily Notes API - manage blocks, tasks, collections and search",
 	"license": "MIT",
-	"homepage": "https://github.com/yigitkonur/n8n-boilerplate-vibecode",
+	"homepage": "https://github.com/yigitkonur/n8n-nodes-craft-daily-notes",
 	"keywords": [
 		"n8n-community-node-package",
 		"n8n",
 		"workflow",
-		"automation"
+		"automation",
+		"craft",
+		"daily-notes",
+		"tasks",
+		"productivity",
+		"notion"
 	],
 	"author": {
 		"name": "Yigit Konur",
@@ -16,7 +21,13 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/yigitkonur/n8n-boilerplate-vibecode.git"
+		"url": "git+https://github.com/yigitkonur/n8n-nodes-craft-daily-notes.git"
+	},
+	"bugs": {
+		"url": "https://github.com/yigitkonur/n8n-nodes-craft-daily-notes/issues"
+	},
+	"engines": {
+		"node": ">=18.0.0"
 	},
 	"scripts": {
 		"build": "n8n-node build",
@@ -34,12 +45,10 @@
 		"n8nNodesApiVersion": 1,
 		"strict": true,
 		"credentials": [
-			"dist/credentials/GithubIssuesApi.credentials.js",
-			"dist/credentials/GithubIssuesOAuth2Api.credentials.js"
+			"dist/credentials/CraftDailyNotesApi.credentials.js"
 		],
 		"nodes": [
-			"dist/nodes/GithubIssues/GithubIssues.node.js",
-			"dist/nodes/Example/Example.node.js"
+			"dist/nodes/CraftDailyNotes/CraftDailyNotes.node.js"
 		]
 	},
 	"devDependencies": {

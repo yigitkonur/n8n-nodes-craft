@@ -1,3 +1,43 @@
-dist
-node_modules
+# Build output
+dist/
+
+# Dependencies
+node_modules/
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# IDE/Editor configs
+.idea/
+*.swp
+*.swo
+
+# AI assistant configs (development only)
+AGENTS.md
+CLAUDE.md
+.windsurf/
+.cursor/
+.continue/
+.aiassistant/
+.gemini/
+.aider.conf.yml
+.clinerules
+.roomodes
+.rules
+
+# Development template files (not needed in published package)
+README_TEMPLATE.md
+craft-api-docs.md
+docs/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+
+# TypeScript incremental compilation
+*.tsbuildinfo
