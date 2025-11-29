@@ -46,62 +46,31 @@ function buildPositionObject(context: IExecuteSingleFunctions): IDataObject {
 /**
  * PreSend hook for block insert operation
  * 
- * DEBUG MODE: Set debugMode = true to see exactly what's being sent
+ * CLEAN IMPLEMENTATION: Send markdown as single text block
+ * Craft API parses it into proper blocks server-side
  */
 export async function blockInsertPreSend(
 	this: IExecuteSingleFunctions,
 	requestOptions: IHttpRequestOptions,
 ): Promise<IHttpRequestOptions> {
-	// === DEBUG MODE - SET TO false FOR PRODUCTION ===
-	const DEBUG_MODE = false;
-	
-	const debugInfo: string[] = [];
-	debugInfo.push('=== CRAFT INSERT v1.0.20 DEBUG ===');
-	debugInfo.push(`requestOptions.body BEFORE: ${JSON.stringify(requestOptions.body)}`);
-	debugInfo.push(`requestOptions.method: ${requestOptions.method}`);
-	debugInfo.push(`requestOptions.url: ${requestOptions.url}`);
-	
-	// Build position object
+	// Get position parameters
 	const position = buildPositionObject(this);
-	debugInfo.push(`Position: ${JSON.stringify(position)}`);
 
-	// Get markdown content
+	// Get markdown content - ensure it's a string
 	let markdownContent = '';
-	let rawValueType = 'unknown';
 	try {
 		const rawValue = this.getNodeParameter('markdownContent', '');
-		rawValueType = typeof rawValue;
-		debugInfo.push(`markdownContent type: ${rawValueType}`);
-		debugInfo.push(`markdownContent isArray: ${Array.isArray(rawValue)}`);
-		
-		if (rawValue === null || rawValue === undefined) {
-			markdownContent = '';
-			debugInfo.push('markdownContent: NULL/UNDEFINED');
-		} else if (typeof rawValue === 'string') {
+		if (typeof rawValue === 'string') {
 			markdownContent = rawValue;
-			debugInfo.push(`markdownContent length: ${rawValue.length}`);
-			debugInfo.push(`markdownContent first 300 chars: ${rawValue.substring(0, 300)}`);
-		} else if (Array.isArray(rawValue)) {
-			debugInfo.push(`WARNING: ARRAY with ${rawValue.length} items`);
-			debugInfo.push(`Array contents: ${JSON.stringify(rawValue).substring(0, 500)}`);
-			markdownContent = rawValue.join('\n');
-		} else if (typeof rawValue === 'object') {
-			debugInfo.push(`WARNING: OBJECT`);
-			debugInfo.push(`Object contents: ${JSON.stringify(rawValue).substring(0, 500)}`);
-			markdownContent = JSON.stringify(rawValue);
-		} else {
+		} else if (rawValue) {
 			markdownContent = String(rawValue);
 		}
-	} catch (error) {
-		debugInfo.push(`ERROR: ${error}`);
+	} catch {
 		markdownContent = '';
 	}
 
-	debugInfo.push(`Has triple backticks: ${markdownContent.includes('```')}`);
-	debugInfo.push(`Final content length: ${markdownContent.length}`);
-
-	// Create the body
-	const bodyObject = {
+	// Build the request body - EXACTLY as the API expects
+	const requestBody = {
 		blocks: [
 			{
 				type: 'text',
@@ -111,28 +80,20 @@ export async function blockInsertPreSend(
 		position: {
 			position: String(position.position || 'end'),
 			date: String(position.date || 'today'),
-			...(position.referenceBlockId ? { referenceBlockId: String(position.referenceBlockId) } : {}),
 		},
 	};
 
-	const jsonBody = JSON.stringify(bodyObject);
-	debugInfo.push(`JSON body blocks count: ${bodyObject.blocks.length}`);
-	debugInfo.push(`JSON body length: ${jsonBody.length}`);
-	debugInfo.push(`JSON body first 800 chars: ${jsonBody.substring(0, 800)}`);
-	
-	// If DEBUG_MODE, throw error with all debug info so user can see it in UI
-	if (DEBUG_MODE) {
-		throw new Error('DEBUG INFO (this is intentional):\n\n' + debugInfo.join('\n'));
+	// Add referenceBlockId only if needed
+	if (position.referenceBlockId) {
+		(requestBody.position as IDataObject).referenceBlockId = String(position.referenceBlockId);
 	}
+
+	// COMPLETELY REPLACE the body - don't merge with existing
+	// Use JSON.stringify to send as raw JSON string
+	requestOptions.body = JSON.stringify(requestBody);
 	
-	// IMPORTANT: Clear existing body and set our own as OBJECT (not string)
-	// n8n will handle JSON serialization
-	// Using 'as IDataObject' to satisfy type requirements
-	requestOptions.body = bodyObject as unknown as IDataObject;
-	
-	// Explicitly set headers
+	// Set headers for JSON
 	requestOptions.headers = {
-		...requestOptions.headers,
 		'Content-Type': 'application/json',
 		'Accept': 'application/json',
 	};
