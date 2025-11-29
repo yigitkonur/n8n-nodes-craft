@@ -5,12 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.1] - 2025-11-29
+## [1.0.3] - 2025-11-29
+
+### Fixed
+
+- **Critical**: Task Update operation now supports true partial updates - State field defaults to "Don't Change" to prevent accidentally resetting completed/cancelled tasks back to "To Do"
+- Verified all API endpoints match official Craft Daily Notes API documentation
+
+## [1.0.2] - 2025-11-29
 
 ### Fixed
 
 - Minor code quality improvements for n8n community standards compliance
-- Improved field ordering in Task Add operation for better UX
+- Alphabetized field ordering in Task Add operation per n8n linting rules
+- Added conditional display for Location Date field (only shown when Location Type is Daily Note)
+
+## [1.0.1] - 2025-11-29
+
+### Fixed
+
+- Initial compliance improvements
 
 ## [1.0.0] - 2025-11-29
 

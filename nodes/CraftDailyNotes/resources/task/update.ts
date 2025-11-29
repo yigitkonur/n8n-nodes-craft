@@ -53,6 +53,11 @@ export const taskUpdateDescription: INodeProperties[] = [
 						type: 'options',
 						options: [
 							{
+								name: "Don't Change",
+								value: '',
+								description: 'Keep the current task state',
+							},
+							{
 								name: 'To Do',
 								value: 'todo',
 							},
@@ -65,8 +70,8 @@ export const taskUpdateDescription: INodeProperties[] = [
 								value: 'cancelled',
 							},
 						],
-						default: 'todo',
-						description: 'The task state (marking as done/cancelled moves to logbook)',
+						default: '',
+						description: 'The task state (leave empty to keep current state, marking as done/cancelled moves to logbook)',
 					},
 					{
 						displayName: 'Task ID',
@@ -85,7 +90,7 @@ export const taskUpdateDescription: INodeProperties[] = [
 				type: 'body',
 				property: 'tasksToUpdate',
 				value:
-					'={{ $value.taskValues ? $value.taskValues.map(t => { const task = { id: t.id }; if (t.markdown) task.markdown = t.markdown; const taskInfo = {}; if (t.state) taskInfo.state = t.state; if (t.scheduleDate) taskInfo.scheduleDate = t.scheduleDate; if (t.deadlineDate) taskInfo.deadlineDate = t.deadlineDate; if (Object.keys(taskInfo).length > 0) task.taskInfo = taskInfo; return task; }) : [] }}',
+					'={{ $value.taskValues ? $value.taskValues.map(t => { const task = { id: t.id }; if (t.markdown) task.markdown = t.markdown; const taskInfo = {}; if (t.state && t.state !== "") taskInfo.state = t.state; if (t.scheduleDate) taskInfo.scheduleDate = t.scheduleDate; if (t.deadlineDate) taskInfo.deadlineDate = t.deadlineDate; if (Object.keys(taskInfo).length > 0) task.taskInfo = taskInfo; return task; }) : [] }}',
 			},
 		},
 	},
