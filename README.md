@@ -68,6 +68,8 @@
 
 **Ported from ClickUp, Airtable, Monday.com, Grist, NocoDB & Baserow — just copy & paste!**
 
+<sub>✅ All workflows validated with <a href="https://www.npmjs.com/package/n8n-workflow-validator">n8n-workflow-validator</a> (built for this project)</sub>
+
 </div>
 
 <p align="center">

@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Major release with 40+ improvements, 100% API coverage, and 500+ ready-to-use workflows!**
 
-- 🔔 **New Trigger Node** — Poll for document & collection changes automatically
 - 📋 **Document Dropdowns** — Select documents visually instead of copying IDs
 - 🧱 **Structured Block Insert** — Full control over block types (text, code, image, divider)
 - 🔍 **Regex Search** — RE2-compatible pattern matching across all documents
@@ -28,11 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Craft Trigger Node** (`CraftDocumentsTrigger`) for polling-based automation
-  - Trigger on: Document Modified, New Document Created, Collection Item Added/Modified
-  - Configurable poll interval (1 minute to 24 hours)
-  - Document and collection filters
-  - Optional full content fetching on trigger
 - **Document Selector Dropdowns** for all block operations — no more manual ID entry
 - **Structured Block Insert Mode** with full type control:
   - Text blocks: markdown, textStyle, listStyle, font, indentation, color
