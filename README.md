@@ -28,22 +28,17 @@
 
 <table align="center">
 <tr>
-<td align="center" width="25%">
-<h3>🔔</h3>
-<b>Trigger Node</b><br/>
-<sub>Poll for document & collection changes</sub>
-</td>
-<td align="center" width="25%">
+<td align="center" width="33%">
 <h3>📋</h3>
 <b>Document Dropdowns</b><br/>
 <sub>Select docs visually, no more IDs</sub>
 </td>
-<td align="center" width="25%">
+<td align="center" width="33%">
 <h3>🧱</h3>
 <b>Structured Blocks</b><br/>
 <sub>Insert with full type control</sub>
 </td>
-<td align="center" width="25%">
+<td align="center" width="33%">
 <h3>🔍</h3>
 <b>Regex Search</b><br/>
 <sub>RE2-compatible pattern matching</sub>
@@ -53,7 +48,7 @@
 
 <div align="center">
 
-**📊 Schema-Aware Collections** • **📅 Native Date Pickers** • **🤖 Enhanced AI Tool Support** • **100% API Coverage**
+**📊 Schema-Aware Collections** • **📅 Native Date/Color (for tags) Pickers** • **🤖 Enhanced AI Tool Support** • **100% API Coverage**
 
 </div>
 
@@ -62,7 +57,7 @@
 
 <br/>
 
-<a href="https://github.com/yigitkonur/craft-n8n-workflows"><img alt="workflows" src="https://img.shields.io/badge/📦_500+_WORKFLOWS-READY_TO_USE-7C4DFF.svg?style=for-the-badge"></a>
+<a href="https://github.com/yigitkonur/craft-n8n-workflows"><img alt="workflows" src="https://img.shields.io/badge/📦_~50_WORKFLOWS-READY_TO_USE-7C4DFF.svg?style=for-the-badge"></a>
 
 ### 🚀 Production-Ready Workflow Collection
 
