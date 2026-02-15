@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-craft-daily-notes",
-	"version": "2.0.3",
+	"version": "2.0.4",
 	"description": "n8n community nodes for Craft APIs - Daily Notes (blocks, tasks, collections, search) and Documents (multi-document management)",
 	"license": "MIT",
 	"homepage": "https://github.com/yigitkonur/n8n-nodes-craft-daily-notes",
