@@ -12,7 +12,7 @@ import type {
 
 /**
  * Factory function to create a Craft API request handler
- * @param credentialName - The name of the credential to use (e.g., 'craftDocumentsApi', 'craftDailyNotesApi')
+ * @param credentialName - The name of the credential to use (e.g., 'craftDocumentsApi', 'craftApi')
  * @returns An async function that makes API requests to the Craft API
  */
 export function createCraftApiRequest(credentialName: string) {

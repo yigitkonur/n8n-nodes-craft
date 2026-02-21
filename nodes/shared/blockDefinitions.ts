@@ -1,6 +1,6 @@
 /**
  * Shared Block Definitions
- * Common options for block operations used by both CraftDocuments and CraftDailyNotes
+ * Common options for block operations used by both CraftDocuments and CraftDailyNotes nodes
  */
 import type { INodePropertyOptions } from 'n8n-workflow';
 

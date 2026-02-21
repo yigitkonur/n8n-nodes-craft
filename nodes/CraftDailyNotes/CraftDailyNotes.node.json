@@ -1,5 +1,5 @@
 {
-	"node": "n8n-nodes-craft-daily-notes.craftDailyNotes",
+	"node": "n8n-nodes-craft.craftDailyNotes",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Productivity"],
@@ -11,7 +11,7 @@
 		],
 		"primaryDocumentation": [
 			{
-				"url": "https://github.com/yigitkonur/n8n-nodes-craft-daily-notes"
+				"url": "https://github.com/yigitkonur/n8n-nodes-craft"
 			}
 		]
 	},

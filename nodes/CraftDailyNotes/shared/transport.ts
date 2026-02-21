@@ -10,7 +10,7 @@ import type {
 } from 'n8n-workflow';
 
 /**
- * Make API request to Craft Daily Notes API
+ * Make API request to Craft Daily Notes API (n8n-nodes-craft)
  * Used by loadOptions methods (e.g., getCollections)
  *
  * @throws Error with descriptive message on API failure

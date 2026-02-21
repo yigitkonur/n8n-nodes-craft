@@ -1,9 +1,9 @@
 {
-	"name": "n8n-nodes-craft-daily-notes",
+	"name": "n8n-nodes-craft",
 	"version": "2.0.5",
 	"description": "n8n community nodes for Craft APIs - Daily Notes (blocks, tasks, collections, search) and Documents (multi-document management)",
 	"license": "MIT",
-	"homepage": "https://github.com/yigitkonur/n8n-nodes-craft-daily-notes",
+	"homepage": "https://github.com/yigitkonur/n8n-nodes-craft",
 	"keywords": [
 		"n8n-community-node-package",
 		"n8n",
@@ -24,10 +24,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/yigitkonur/n8n-nodes-craft-daily-notes.git"
+		"url": "git+https://github.com/yigitkonur/n8n-nodes-craft.git"
 	},
 	"bugs": {
-		"url": "https://github.com/yigitkonur/n8n-nodes-craft-daily-notes/issues"
+		"url": "https://github.com/yigitkonur/n8n-nodes-craft/issues"
 	},
 	"engines": {
 		"node": ">=20.15.0"
