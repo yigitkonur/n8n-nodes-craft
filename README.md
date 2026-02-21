@@ -1,12 +1,12 @@
 n8n community nodes for Craft's Connect API. two nodes — one for daily notes + tasks, one for named documents. fully declarative, no `execute()` method, works as AI agent tools (`usableAsTool: true`).
 
 ```bash
-npm install n8n-nodes-craft-daily-notes
+npm install n8n-nodes-craft
 ```
 
 or install via n8n's community nodes UI by package name.
 
-[![npm](https://img.shields.io/npm/v/n8n-nodes-craft-daily-notes.svg?style=flat-square)](https://www.npmjs.com/package/n8n-nodes-craft-daily-notes)
+[![npm](https://img.shields.io/npm/v/n8n-nodes-craft.svg?style=flat-square)](https://www.npmjs.com/package/n8n-nodes-craft)
 [![node](https://img.shields.io/badge/node->=20.15-93450a.svg?style=flat-square)](https://nodejs.org/)
 [![license](https://img.shields.io/badge/license-MIT-grey.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
@@ -77,8 +77,8 @@ two scopes: search within a single document/daily note (returns matching blocks 
 ## build from source
 
 ```bash
-git clone https://github.com/yigitkonur/n8n-nodes-craft-daily-notes.git
-cd n8n-nodes-craft-daily-notes
+git clone https://github.com/yigitkonur/n8n-nodes-craft.git
+cd n8n-nodes-craft
 pnpm install
 pnpm build
 ```
