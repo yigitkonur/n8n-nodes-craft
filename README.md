@@ -1,348 +1,142 @@
-<h1 align="center">📝 n8n-nodes-craft 📝</h1>
-<h3 align="center">Automate your Craft docs. Stop manual copy-pasting.</h3>
-
-<p align="center">
-  <strong>
-    <em>The ultimate n8n community nodes for Craft. Manage daily notes, documents, blocks, tasks, and collections — all from your workflows.</em>
-  </strong>
-</p>
-
-<p align="center">
-  <a href="https://www.npmjs.com/package/n8n-nodes-craft-daily-notes"><img alt="npm" src="https://img.shields.io/npm/v/n8n-nodes-craft-daily-notes.svg?style=flat-square&color=4D87E6"></a>
-  <a href="#"><img alt="node" src="https://img.shields.io/badge/node-%3E%3D20.15.0-4D87E6.svg?style=flat-square"></a>
-  &nbsp;&nbsp;•&nbsp;&nbsp;
-  <a href="LICENSE.md"><img alt="license" src="https://img.shields.io/badge/License-MIT-F9A825.svg?style=flat-square"></a>
-  <a href="https://docs.n8n.io/integrations/community-nodes/"><img alt="n8n" src="https://img.shields.io/badge/n8n-Community%20Node-FF6D5A.svg?style=flat-square"></a>
-</p>
-
-<!-- 🎉 V2 ANNOUNCEMENT -->
-<div align="center">
-
-<br/>
-
-<a href="CHANGELOG.md"><img alt="v2" src="https://img.shields.io/badge/🎉_v2.0.0-NOW_AVAILABLE-00C853.svg?style=for-the-badge"></a>
-
-### ⚡ What's New in v2
-
-</div>
-
-<table align="center">
-<tr>
-<td align="center" width="33%">
-<h3>📋</h3>
-<b>Document Dropdowns</b><br/>
-<sub>Select docs visually, no more IDs</sub>
-</td>
-<td align="center" width="33%">
-<h3>🧱</h3>
-<b>Structured Blocks</b><br/>
-<sub>Insert with full type control</sub>
-</td>
-<td align="center" width="33%">
-<h3>🔍</h3>
-<b>Regex Search</b><br/>
-<sub>RE2-compatible pattern matching</sub>
-</td>
-</tr>
-</table>
-
-<div align="center">
-
-**📊 Schema-Aware Collections** • **📅 Native Date/Color (for tags) Pickers** • **🤖 Enhanced AI Tool Support** • **100% API Coverage**
-
-</div>
-
-<!-- 📦 WORKFLOWS SECTION -->
-<div align="center">
-
-<br/>
-
-<a href="https://github.com/yigitkonur/craft-n8n-workflows"><img alt="workflows" src="https://img.shields.io/badge/📦_~50_WORKFLOWS-READY_TO_USE-7C4DFF.svg?style=for-the-badge"></a>
-
-### 🚀 Production-Ready Workflow Collection
-
-**Ported from ClickUp, Airtable, Monday.com, Grist, NocoDB & Baserow — just copy & paste!**
-
-<sub>✅ All workflows validated with <a href="https://www.npmjs.com/package/n8n-workflow-validator">n8n-workflow-validator</a> (built for this project)</sub>
-
-</div>
-
-<p align="center">
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Craft Chat Analyzer</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Telegram AI Assistant</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">DeepSeek Agent</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Google Analytics AI</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Social Caption Generator</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Email to Craft Tasks</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Job Application Processor</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Fireflies Meeting Agent</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Zoom Meeting Assistant</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">AI Deep Research Agent</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Obsidian Craft Sync</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Support Sentiment Tracker</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Dynamic AI Data Extractor</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Pinterest Content Analyzer</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">HubSpot Chat Assistant</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">Stock Earnings RAG</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">RFP Automation</a> ᛫
-<a href="https://github.com/yigitkonur/craft-n8n-workflows">and 40+ more...</a>
-</p>
-
-<div align="center">
-
-<sub>🤖 AI Agents • 📊 Analytics • 🎨 Content Creation • 📧 Email • 💼 HR • 📋 Project Management • 🔍 Web Scraping • 🧠 Knowledge RAG</sub>
-
-<br/><br/>
-
-<a href="https://github.com/yigitkonur/craft-n8n-workflows"><img alt="browse" src="https://img.shields.io/badge/Browse_All_Workflows_→-7C4DFF.svg?style=flat-square"></a>
-
-</div>
-
-<p align="center">
-  <img alt="daily notes" src="https://img.shields.io/badge/📅_Daily_Notes-blocks,_tasks,_search-2ED573.svg?style=for-the-badge">
-  <img alt="documents" src="https://img.shields.io/badge/📄_Documents-multi--doc_management-2ED573.svg?style=for-the-badge">
-</p>
-
-<div align="center">
-
-### 🧭 Quick Navigation
-
-[**🎉 What's New**](#-whats-new-in-v2) • 
-[**📦 Workflows**](https://github.com/yigitkonur/craft-n8n-workflows) • 
-[**⚡ Install**](#-installation) • 
-[**🔑 Setup**](#-setup) • 
-[**✨ Features**](#-features) • 
-[**🎮 Examples**](#-examples) •
-[**🛠️ Development**](#️-development)
-
-</div>
-
----
-
-**Two powerful nodes in one package.** Whether you're automating daily journaling, syncing tasks to external systems, or building AI-powered document workflows — this package has you covered.
-
-<div align="center">
-<table>
-<tr>
-<td align="center">
-<h3>📅</h3>
-<b>Craft Daily Notes</b><br/>
-<sub>Blocks, tasks, collections, search</sub>
-</td>
-<td align="center">
-<h3>📄</h3>
-<b>Craft Documents</b><br/>
-<sub>Multi-document management</sub>
-</td>
-<td align="center">
-<h3>🤖</h3>
-<b>AI Agent Ready</b><br/>
-<sub>Works with n8n AI tools</sub>
-</td>
-</tr>
-</table>
-</div>
-
----
-
-## 💥 Why This Exists
-
-Craft is beautiful for writing. But getting data in and out? Pain. This package fixes that.
-
-<table align="center">
-<tr>
-<td align="center"><b>❌ Without This Node</b></td>
-<td align="center"><b>✅ With This Node</b></td>
-</tr>
-<tr>
-<td>
-<ol>
-  <li>Open Craft. Copy block IDs manually.</li>
-  <li>Write custom API scripts.</li>
-  <li>Debug authentication issues.</li>
-  <li>Pray your automation works.</li>
-</ol>
-</td>
-<td>
-<ol>
-  <li>Install the node.</li>
-  <li>Paste your Connect URL.</li>
-  <li>Build workflows visually.</li>
-  <li>Ship it. ☕</li>
-</ol>
-</td>
-</tr>
-</table>
-
----
-
-## 🚀 Installation
-
-### Community Nodes (Recommended)
-
-1. Go to **Settings → Community Nodes** in n8n
-2. Click **Install**
-3. Enter `n8n-nodes-craft-daily-notes`
-4. Click **Install**
-
-### Manual Installation
+n8n community nodes for Craft's Connect API. two nodes — one for daily notes + tasks, one for named documents. fully declarative, no `execute()` method, works as AI agent tools (`usableAsTool: true`).
 
 ```bash
-cd ~/.n8n/nodes
-pnpm add n8n-nodes-craft-daily-notes
+npm install n8n-nodes-craft-daily-notes
 ```
+
+or install via n8n's community nodes UI by package name.
+
+[![npm](https://img.shields.io/npm/v/n8n-nodes-craft-daily-notes.svg?style=flat-square)](https://www.npmjs.com/package/n8n-nodes-craft-daily-notes)
+[![node](https://img.shields.io/badge/node->=20.15-93450a.svg?style=flat-square)](https://nodejs.org/)
+[![license](https://img.shields.io/badge/license-MIT-grey.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 ---
 
-## 🔑 Setup
+## what it does
 
-<table>
-<tr>
-<td width="50%">
+two separate n8n nodes wrapping Craft's two Connect APIs:
 
-### Daily Notes API
+**craft daily notes** — date-indexed journal entries
 
-1. In Craft: **Settings → Connect → Daily Notes & Tasks**
-2. Copy your Connect API URL
-3. In n8n: Create **Craft Daily Notes API** credentials
-4. Paste the URL
+| resource | operations |
+|:---|:---|
+| block | get, insert, update, delete, move, search |
+| task | get, add, update, delete |
+| collection | list, get schema, get items, add items, update items, delete items |
+| search | search across all daily notes (plain text or RE2 regex) |
 
-</td>
-<td width="50%">
+**craft documents** — named, addressable documents
 
-### Documents API
+| resource | operations |
+|:---|:---|
+| document | list |
+| block | get, insert, update, delete, move, search |
+| collection | list, get schema, get items, add items, update items, delete items |
+| search | search across documents with include/exclude filters |
 
-1. In Craft: **Settings → Connect → Your Connection**
-2. Copy your Connect API URL
-3. In n8n: Create **Craft Documents API** credentials
-4. Paste the URL
+the difference between the two nodes is addressing: daily notes use dates, documents use document IDs. everything else — block updates, collection operations, search — works the same way.
 
-</td>
-</tr>
-</table>
+## authentication
 
-> **🔐 Security Note:** The API URL contains your auth token. Keep it private.
+no tokens, no OAuth. Craft's Connect API embeds the auth in the URL itself.
 
----
+1. in Craft, go to Settings > Connect
+2. grab the API URL (looks like `https://connect.craft.do/links/{UUID}/api/v1`)
+3. paste it into the n8n credential
 
-## ✨ Features
+that's the entire auth setup. the UUID in the URL is the access grant.
 
-<div align="center">
+## usage
 
-### Craft Daily Notes
+### insert a block into today's daily note
 
-| Resource | Operations |
-|:--------:|:-----------|
-| **📦 Block** | Get, Insert, Update, Delete, Move, Search |
-| **✅ Task** | Get, Add, Update, Delete |
-| **🗂️ Collection** | List, Get Schema, Get/Add/Update/Delete Items |
-| **🔍 Search** | Search Across All Daily Notes |
+set resource to **block**, operation to **insert**, write your content as markdown. Craft's server parses it into proper block types.
 
-### Craft Documents
+### manage tasks
 
-| Resource | Operations |
-|:--------:|:-----------|
-| **📄 Document** | List All Documents |
-| **📦 Block** | Get, Insert, Update, Delete, Move, Search |
-| **🗂️ Collection** | List, Get Schema, Get/Add/Update/Delete Items |
-| **🔍 Search** | Search Across All Documents |
+get active/upcoming/inbox/logbook tasks, add new ones with schedule and deadline dates, update state (todo/done/cancelled), or delete by ID.
 
-</div>
+### work with collections
 
-### 🎯 Key Capabilities
+collections are structured databases inside Craft. you can list them, fetch their schema (raw or JSON Schema format), and CRUD items with typed properties.
 
-- **📅 Relative Dates** — Use `today`, `tomorrow`, `yesterday` or `YYYY-MM-DD`
-- **🤖 AI Agent Support** — Works as a tool in AI-powered workflows
-- **📋 Smart Dropdowns** — Collections load dynamically from your data
-- **⚡ Declarative Routing** — Clean, maintainable node architecture
+### search
 
----
+two scopes: search within a single document/daily note (returns matching blocks with context), or search across all daily notes / documents with date range or document ID filters. supports plain text and RE2 regex.
 
-## 🎮 Examples
+## block properties
 
-### Get Today's Daily Note
+| property | values |
+|:---|:---|
+| text style | `body`, `caption`, `card`, `h1`-`h4`, `page` |
+| list style | `bullet`, `none`, `numbered`, `task`, `toggle` |
+| font | `system`, `serif`, `rounded`, `mono` |
+| position | `start`, `end`, `before`, `after` (relative to a sibling block) |
+| color | hex value, sent as `decorations: [{ color: "#hex" }]` |
 
-```
-Node: Craft Daily Notes
-Resource: Block → Get
-Date: today
-```
-
-### Add Task to Inbox
-
-```
-Node: Craft Daily Notes
-Resource: Task → Add
-Content: "Review pull requests"
-Location: Inbox
-```
-
-### Insert Content into Document
-
-```
-Node: Craft Documents
-Resource: Block → Insert
-Document ID: (select from dropdown)
-Content: "## Meeting Notes\n\n- Point 1\n- Point 2"
-```
-
-### Search Across Everything
-
-```
-Node: Craft Daily Notes
-Resource: Search → Search Across Daily Notes
-Terms: "project alpha"
-```
-
----
-
-## 🛠️ Development
+## build from source
 
 ```bash
-# Install dependencies
+git clone https://github.com/yigitkonur/n8n-nodes-craft-daily-notes.git
+cd n8n-nodes-craft-daily-notes
 pnpm install
-# Development mode (hot reload)
-pnpm dev
-
-# Build for production
 pnpm build
-
-# Lint code
-pnpm lint
 ```
 
-### Project Structure
+other commands:
 
-```
-├── credentials/          # API credential definitions
-├── nodes/
-│   ├── CraftDailyNotes/  # Daily Notes node
-│   └── CraftDocuments/   # Documents node
-├── icons/                # Node icons (light/dark)
-└── dist/                 # Compiled output
+```bash
+pnpm build:watch    # tsc --watch
+pnpm lint           # n8n-node lint
+pnpm lint:fix       # n8n-node lint --fix
 ```
 
----
+requires node >= 20.15 and pnpm.
 
-## 📚 Resources
+## project structure
 
-- [Craft Connect Documentation](https://www.craft.do/s/hLrMZpKFfYRWPT)
-- [n8n Community Nodes Guide](https://docs.n8n.io/integrations/community-nodes/)
-- [Changelog](CHANGELOG.md)
+```
+credentials/
+  CraftDailyNotesApi.credentials.ts    — daily notes API credential
+  CraftDocumentsApi.credentials.ts     — documents API credential
+nodes/
+  shared/
+    blockDefinitions.ts                — shared option lists (styles, fonts, positions)
+    transport.ts                       — API request factory, ID array parser
+  CraftDailyNotes/
+    CraftDailyNotes.node.ts            — main node class
+    shared/transport.ts                — credential-bound API request
+    loadOptions/getCollections.ts      — dynamic dropdown for collections
+    resources/
+      block/                           — get, insert, update, delete, move, search
+      task/                            — get, add, update, delete
+      collection/                      — list, schema, items CRUD
+      search/                          — cross-daily-note search
+  CraftDocuments/
+    CraftDocuments.node.ts             — main node class
+    shared/transport.ts                — credential-bound API request
+    loadOptions/
+      getDocuments.ts                  — dynamic dropdown for documents
+      getCollections.ts                — dynamic dropdown for collections
+      getBlocks.ts                     — dynamic dropdown, flattens block tree
+    resources/
+      document/                        — list
+      block/                           — same as daily notes, uses document ID instead of date
+      collection/                      — same ops, filters by document IDs instead of dates
+      search/                          — cross-document search with include/exclude
+icons/
+  craft.svg                            — light mode
+  craft.dark.svg                       — dark mode
+```
 
----
+## how it works internally
 
-<div align="center">
+- fully declarative architecture — all routing defined in `INodeProperties` metadata, no imperative `execute()` method
+- block insert uses a `preSend` hook that wraps markdown into a `type: "text"` block, lets Craft's server-side parser handle the rest
+- ID fields accept both comma-separated strings and JSON arrays
+- dynamic dropdowns (`loadOptions`) fetch live data from the API for collections, documents, and block trees
+- block tree flattening uses recursive traversal with depth-based indentation for the dropdown display
 
-## 👤 Author
+## license
 
-**Yigit Konur**
-
-[![GitHub](https://img.shields.io/badge/GitHub-yigitkonur-181717?style=flat-square&logo=github)](https://github.com/yigitkonur)
-[![Email](https://img.shields.io/badge/Email-yigit@konur.dev-EA4335?style=flat-square&logo=gmail&logoColor=white)](mailto:yigit@konur.dev)
-
----
-
-**[MIT License](LICENSE.md)** — Built with 🔥 for the Craft + n8n community.
-
-</div>
+MIT
